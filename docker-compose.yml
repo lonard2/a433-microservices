@@ -1,0 +1,22 @@
+# Konfigurasi Docker Compose untuk assignment Dicoding 1 - Membangun Arsitektur Microservices
+# Nama siswa: Lonard Steven - Jakarta
+
+version: "3.8"                                          # 1. Versi Docker Compose yang digunakan (3.8, lebih dari versi 2)
+
+services:                                               # 2a. Awal dari definisi service
+  item-app:                                             # 2b. Awal definisi service item-app
+    image: ghcr.io/lonard2/item-app:v1                  # 2c. Menggunakan image item-app dengan tag versi v1 dari GitHub Packages pribadi
+    ports:                                              # 2d. Melakukan port mapping agar aplikasi dapat diakses dari port 80 (host dan container)
+      - 80:80
+    depends_on:                                         # 2e. Memastikan bahwa service item-app dijalankan setelah service item-db berhasil dijalankan
+      - item-db
+    restart: always                                     # Memastikan bahwa container service item-app akan selalu restart ketika terhenti
+
+  item-db:                                              # 2f. Awal definisi service item-db
+    image: mongo:3                                      # 2g. Menggunakan image mongo:3 dari Docker Hub
+    volumes:                                            # 2h. Menggunakan volume app-db dengan target directory /data/db
+      - app-db:/data/db
+    restart: always                                     # Memastikan bahwa container service item-db akan selalu restart ketika terhenti
+
+volumes:                                                # 3. Melakukan pembuatan volume baru dengan nama app-db
+  app-db:
