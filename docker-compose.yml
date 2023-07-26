@@ -6,8 +6,8 @@ version: "3.8"                                          # 1. Versi Docker Compos
 services:                                               # 2a. Awal dari definisi service
   item-app:                                             # 2b. Awal definisi service item-app
     image: ghcr.io/lonard2/item-app:v1                  # 2c. Menggunakan image item-app dengan tag versi v1 dari GitHub Packages pribadi
-    ports:                                              # 2d. Melakukan port mapping agar aplikasi dapat diakses dari port 80 (host dan container)
-      - 80:80
+    ports:                                              # 2d. Melakukan port mapping agar aplikasi dapat diakses dari port 80 (host) dengan port 8080 (container)
+      - 80:8080
     depends_on:                                         # 2e. Memastikan bahwa service item-app dijalankan setelah service item-db berhasil dijalankan
       - item-db
     restart: always                                     # Memastikan bahwa container service item-app akan selalu restart ketika terhenti
