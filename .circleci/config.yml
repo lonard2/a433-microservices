@@ -7,9 +7,10 @@ version: 2.1              # Menetapkan versi YML dari file konfigurasi YML
 jobs:                                                                       # Definisi job yang akan dilakukan pada CircleCI
   lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile backend
     docker:
-      - image: hadolint/hadolint
+      - image: cimg/base:2023.11
     steps: 
-      - run: hadolint Dockerfile
+      - run: docker pull hadolint/hadolint:latest-debian                    # Download image Hadolint
+      - run: hadolint Dockerfile                                            # Pakai Hadolint untuk Dockerfile di repositori terkait
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
     docker:
       - image: cimg/base:2023.11
