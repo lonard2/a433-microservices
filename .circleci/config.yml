@@ -8,7 +8,8 @@ jobs:                                                                       # De
   lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile backend
     docker:
       - image: cimg/base:2023.11
-    steps: 
+    steps:
+      - checkout
       - run: docker pull hadolint/hadolint:latest-debian                    # Download image Hadolint
       - run: hadolint Dockerfile                                            # Pakai Hadolint untuk Dockerfile di repositori terkait
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
