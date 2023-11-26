@@ -6,27 +6,29 @@ version: 2.1              # Menetapkan versi YML dari file konfigurasi YML
 
 jobs:                                                                       # Definisi job yang akan dilakukan pada CircleCI
   lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile backend
-    name: Install Hadolint and use it against the backend Dockerfile
-    command: 
-    - image: hadolint/hadolint
-    - run: hadolint Dockerfile
+    docker:
+      - image: hadolint/hadolint
+    steps: 
+      - run: hadolint Dockerfile
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
-    name: Test the backend app!
-    command:
+    docker:
+      - image: cimg/base:2023.11
+    steps:
     - run: go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
-    name: Build and push the backend app to the GitHub Package Registry!
-    command:
+    docker:
+      - image: cimg/base:2023.11
+    steps:
     - run: sh build_push_image_karsajobs.sh
 
-  workflows:
-    karsajobs-cicd:
-      jobs:
-        - lint-dockerfile
-        - test-app:
-            requires:
-              - lint-dockerfile
-        - build-app-karsajobs:
-            requires:
-              - lint-dockerfile
-              - test-app
+workflows:                                # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
+  karsajobs-cicd:
+    jobs:
+      - lint-dockerfile                   # Melakukan job 1 (lint-dockerfile) pertama-tama,
+      - test-app:                         # Melakukan job 2 (test-app) setelah job lint-dockerfile tuntas & berhasil dilakukan, dan
+          requires:
+            - lint-dockerfile
+      - build-app-karsajobs:              # Melakukan job 3 (build-app-karsajobs) setelah job lint-dockerfile & test-app selesai dilakukan (dan berhasil)
+          requires:
+            - lint-dockerfile
+            - test-app
