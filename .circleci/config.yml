@@ -9,7 +9,8 @@ jobs:                                                                       # De
     docker:
       - image: hadolint/hadolint
     steps: 
-      - run: hadolint Dockerfile
+      - run: docker pull hadolint/hadolint:latest-debian                    # Download image Hadolint
+      - run: hadolint Dockerfile                                            # Pakai Hadolint untuk Dockerfile di repositori terkait
   build-app-karsajobs-ui:                                                   # Job 2 - build-app-karsajobs-ui: Menjalankan file script untuk build dan push image
     docker:
       - image: cimg/base:2023.11
