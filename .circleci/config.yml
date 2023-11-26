@@ -6,19 +6,20 @@ version: 2.1              # Menetapkan versi YML dari file konfigurasi YML
 
 jobs:                                                                       # Definisi job yang akan dilakukan pada CircleCI
   lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile frontend
-    name: Install Hadolint and use it against the frontend Dockerfile
-    command: 
-    - image: hadolint/hadolint
-    - run: hadolint Dockerfile
-  build-app-karsajobs-ui:                                                   # Job 2 - build-app-karsajobs: Menjalankan file script untuk build dan push image
-    name: Build and push the frontend app to the GitHub Package Registry!
-    command:
+    docker:
+      - image: hadolint/hadolint
+    steps: 
+      - run: hadolint Dockerfile
+  build-app-karsajobs-ui:                                                   # Job 2 - build-app-karsajobs-ui: Menjalankan file script untuk build dan push image
+    docker:
+      - image: cimg/base:2023.11
+    steps:
     - run: sh build_push_image_karsajobs_ui.sh
 
-  workflows:
-    karsajobs-ui-cicd:
-      jobs:
-        - lint-dockerfile
-        - build-app-karsajobs-ui:
-            requires:
-              - lint-dockerfile
+workflows:                                                                  # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
+  karsajobs-ui-cicd:
+    jobs:
+      - lint-dockerfile                                                     # Melakukan job 1 (lint-dockerfile) pertama-tama, dan
+      - build-app-karsajobs-ui:                                             # Melakukan job 2 (build-app-karsajobs-ui) setelah job lint-dockerfile selesai dilakukan (dan berhasil)
+          requires:
+            - lint-dockerfile
