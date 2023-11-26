@@ -1,0 +1,32 @@
+# File YAML untuk konfigurasi workflow CI/CD aplikasi Karsajobs backend pada CircleCI
+# untuk assignment Dicoding 2 - Membangun Arsitektur Microservices dengan Kubernetes
+# Nama siswa: Lonard Steven - Jakarta
+
+version: 2.1              # Menetapkan versi YML dari file konfigurasi YML
+
+jobs:                                                                       # Definisi job yang akan dilakukan pada CircleCI
+  lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile backend
+    name: Install Hadolint and use it against the backend Dockerfile
+    command: 
+    - image: hadolint/hadolint
+    - run: hadolint Dockerfile
+  test-app:                                                                 # Job 2 - test-app: Menguji app backend
+    name: Test the backend app!
+    command:
+    - run: go test -v -short --count=1 $(go list ./...)
+  build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
+    name: Build and push the backend app to the GitHub Package Registry!
+    command:
+    - run: sh build_push_image_karsajobs.sh
+
+  workflows:
+    karsajobs-cicd:
+      jobs:
+        - lint-dockerfile
+        - test-app:
+            requires:
+              - lint-dockerfile
+        - build-app-karsajobs:
+            requires:
+              - lint-dockerfile
+              - test-app
