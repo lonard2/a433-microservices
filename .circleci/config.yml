@@ -17,8 +17,7 @@ jobs:                                                                       # De
     docker:
       - image: golang:latest
     steps:
-    - run: ls
-    - run: echo pwd
+    - run: go env -w GO111MODULE=auto
     - run: go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
     docker:
