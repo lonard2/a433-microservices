@@ -17,13 +17,12 @@ jobs:                                                                       # De
     docker:
       - image: golang:latest
     steps:
-    - run: go env -w GO111MODULE=auto
-    - run: go test -v -short --count=1 $(go list ./...)
+      - run: go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
     docker:
       - image: cimg/base:2023.11
     steps:
-    - run: sh build_push_image_karsajobs.sh
+      - run: sh build_push_image_karsajobs.sh
 
 workflows:                                # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
   karsajobs-cicd:
