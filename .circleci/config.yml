@@ -9,7 +9,9 @@ jobs:                                                                       # De
     docker:
       - image: cimg/base:2023.11
     steps:
-      - checkout
+      - checkout                                                            # Lakukan checkout step
+      - setup_remote_docker:                                                # Atur entity Docker yang dijalankan secara remote (dengan layer caching diaktifkan)
+          docker_layer_caching: true
       - run: docker pull hadolint/hadolint:latest-debian                    # Download image Hadolint
       - run: hadolint Dockerfile                                            # Pakai Hadolint untuk Dockerfile di repositori terkait
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
