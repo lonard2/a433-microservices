@@ -10,7 +10,7 @@ docker build -t lonard2/karsajobs:latest
 
 # Membuat sebuah environment variable bernama PAT_BE (personal access token) yang berisikan token PAT dari GitHub yang telah diperbolehkan
 # (allowed) akses write & read package serta repository / repo. Perannya ialah untuk mendukung proses login Docker.
-export PAT_BE=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
+export PAT_BE=
 
 # Login Docker ke container registry ghcr.io (GitHub Packages) dengan username GitHub pribadi dan password account berupa PAT_BE (environment variable)
 # pada line sebelumnya.
