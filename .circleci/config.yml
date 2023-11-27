@@ -9,14 +9,18 @@ jobs:                                                                       # De
     docker:
       - image: cimg/base:2023.11
     steps: 
-      - checkout
-      - run: docker pull hadolint/hadolint:latest-debian                    # Download image Hadolint
-      - run: hadolint Dockerfile                                            # Pakai Hadolint untuk Dockerfile di repositori terkait
+      - checkout                                                            # Lakukan checkout step
+      - setup_remote_docker:                                                # Atur entity Docker yang dijalankan secara remote (dengan layer caching diaktifkan)
+          docker_layer_caching: true
+      - run: docker run --rm -i hadolint/hadolint < Dockerfile              # Pakai Hadolint untuk Dockerfile di repositori terkait                                           # Pakai Hadolint untuk Dockerfile di repositori terkait
   build-app-karsajobs-ui:                                                   # Job 2 - build-app-karsajobs-ui: Menjalankan file script untuk build dan push image
     docker:
-      - image: cimg/base:2023.11
+      - image: cimg/base:2023.11                                            # Menggunakan image cimg base versi 2023.11
     steps:
-    - run: sh build_push_image_karsajobs_ui.sh
+      - checkout                                                            # Lakukan checkout step
+      - setup_remote_docker:                                                # Atur kembali entity Docker yang dijalankan secara remote (dengan layer caching diaktifkan)
+          docker_layer_caching: true
+      - run: sh build_push_image_karsajobs_ui.sh                            # Jalankan shell file untuk build & push image karsajobs frontend
 
 workflows:                                                                  # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
   karsajobs-ui-cicd:
