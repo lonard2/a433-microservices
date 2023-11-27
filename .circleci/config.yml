@@ -7,7 +7,7 @@ version: 2.1              # Menetapkan versi YML dari file konfigurasi YML
 jobs:                                                                       # Definisi job yang akan dilakukan pada CircleCI
   lint-dockerfile:                                                          # Job 1 - lint-dockerfile: Menginstal Hadolint dan menggunakannya pada Dockerfile backend
     docker:
-      - image: cimg/base:2023.11
+      - image: cimg/base:2023.11                                            # Menggunakan image cimg base versi 2023.11
     steps:
       - checkout                                                            # Lakukan checkout step
       - setup_remote_docker:                                                # Atur entity Docker yang dijalankan secara remote (dengan layer caching diaktifkan)
@@ -15,16 +15,18 @@ jobs:                                                                       # De
       - run: docker run --rm -i hadolint/hadolint < Dockerfile              # Pakai Hadolint untuk Dockerfile di repositori terkait
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
     docker:
-      - image: cimg/go:1.21.4
+      - image: cimg/go:1.21.4                                               # Menggunakan image cimg yang disesuaikan untuk penggunaan Golang, versi 1.21.4
     steps:
-      - checkout
-      - run: go test -v -short --count=1 $(go list ./...)
+      - checkout                                                            # Lakukan checkout step
+      - run: go test -v -short --count=1 $(go list ./...)                   # Lakukan pengujian/test Golang
   build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
     docker:
-      - image: cimg/base:2023.11
+      - image: cimg/base:2023.11                                            # Menggunakan image cimg base versi 2023.11
     steps:
-      - checkout
-      - run: sh build_push_image_karsajobs.sh
+      - checkout                                                            # Lakukan checkout step
+      - setup_remote_docker:                                                # Atur kembali entity Docker yang dijalankan secara remote (dengan layer caching diaktifkan)
+          docker_layer_caching: true
+      - run: sh build_push_image_karsajobs.sh                               # Jalankan shell file untuk build & push image karsajobs backend
 
 workflows:                                # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
   karsajobs-cicd:
