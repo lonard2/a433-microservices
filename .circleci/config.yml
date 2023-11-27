@@ -15,14 +15,15 @@ jobs:                                                                       # De
       - run: docker run --rm -i hadolint/hadolint < Dockerfile              # Pakai Hadolint untuk Dockerfile di repositori terkait
   test-app:                                                                 # Job 2 - test-app: Menguji app backend
     docker:
-      - image: golang:latest
+      - image: cimg/go:1.21.4
     steps:
-      - run: go env -w GO111MODULE=off
+      - checkout
       - run: go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:                                                      # Job 3 - build-app-karsajobs: Menjalankan file script untuk build dan push image
     docker:
       - image: cimg/base:2023.11
     steps:
+      - checkout
       - run: sh build_push_image_karsajobs.sh
 
 workflows:                                # Alur kerja/workflow dari proses CI/CD yang dilakukan CircleCI, yakni:
