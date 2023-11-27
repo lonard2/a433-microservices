@@ -6,7 +6,7 @@
 			
 # Membangun image docker (local) dari Dockerfile yang telah tersedia dengan nama karsajobs (mengingat script untuk bagian backend aplikasi)
 # dan dibuatkan untuk versi latest. Image akan menggunakan username lonard2.
-docker build -t lonard2/karsajobs:latest
+docker build -t lonard2/karsajobs:latest .
 
 # Login Docker ke container registry ghcr.io (GitHub Packages) dengan username GitHub pribadi dan password account berupa PAT_BE (environment variable)
 # pada line sebelumnya.
